@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 @Entity("web_users", { schema: "auclairm_espaceclient" })
+@Unique(['login_wuser'])
 export class WebUsers {
   @PrimaryGeneratedColumn({ type: "int", name: "ref_wuser" })
   refWuser: number;
