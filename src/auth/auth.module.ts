@@ -3,10 +3,28 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WebUsers } from '../../entities/WebUsers';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStartegy } from './jwt.startegy';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([WebUsers])],
-  providers: [AuthService],
+  imports: [
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.register({
+      secret: "azerty2020",
+      signOptions: {
+        expiresIn: 3600
+      }
+    }),
+    TypeOrmModule.forFeature([WebUsers])],
+  providers: [
+    AuthService,
+    JwtStartegy,
+  ],
+  exports: [
+    JwtStartegy,
+    PassportModule
+  ],
   controllers: [AuthController]
 })
 export class AuthModule { }
