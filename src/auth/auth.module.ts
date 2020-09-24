@@ -11,9 +11,9 @@ import { JwtStartegy } from './jwt.startegy';
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
-      secret: "azerty2020",
+      secret: "kksdnxjsqmsdkevvxxpmm%%SDECLDFQQSSDSAZZRRfr8rtf5z888",
       signOptions: {
-        expiresIn: 3600
+        expiresIn: 10
       }
     }),
     TypeOrmModule.forFeature([WebUsers])],

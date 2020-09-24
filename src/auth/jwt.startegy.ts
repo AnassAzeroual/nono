@@ -10,7 +10,7 @@ export class JwtStartegy extends PassportStrategy(Strategy) {
     constructor(@InjectRepository(WebUsers) private repoWebUsers: Repository<WebUsers>) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-            secretOrKey: 'azerty2020'
+            secretOrKey: 'kksdnxjsqmsdkevvxxpmm%%SDECLDFQQSSDSAZZRRfr8rtf5z888'
         });
     }
 
