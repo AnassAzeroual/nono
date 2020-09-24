@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
 
   const allowedOrigins = [
     'http://localhost:4200',
@@ -9,8 +10,6 @@ async function bootstrap() {
 
   const corsOptions = {
     origin: (origin, callback) => {
-      console.log('=======>', origin);
-
       if (allowedOrigins.includes(origin) || !origin) {
         callback(null, true);
       } else {
@@ -18,7 +17,6 @@ async function bootstrap() {
       }
     },
   };
-  const app = await NestFactory.create(AppModule);
   app.enableCors({ ...corsOptions });
   await app.listen(process.env.PORT || 3000);
 }
