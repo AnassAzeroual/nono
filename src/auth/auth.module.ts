@@ -13,7 +13,7 @@ import { JwtStartegy } from './jwt.startegy';
     JwtModule.register({
       secret: "kksdnxjsqmsdkevvxxpmm%%SDECLDFQQSSDSAZZRRfr8rtf5z888",
       signOptions: {
-        expiresIn: 10
+        expiresIn: 3600 // 1h
       }
     }),
     TypeOrmModule.forFeature([WebUsers])],

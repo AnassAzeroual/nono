@@ -1,7 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
 
+@Index("IDX_077c92e4809676aaf205c3178c", ["loginWuser"], { unique: true })
 @Entity("web_users", { schema: "auclairm_espaceclient" })
-@Unique(['loginWuser'])
 export class WebUsers {
   @PrimaryGeneratedColumn({ type: "int", name: "ref_wuser" })
   refWuser: number;
@@ -19,7 +19,12 @@ export class WebUsers {
   @Column("int", { name: "refuser_wuser", nullable: true })
   refuserWuser: number | null;
 
-  @Column("varchar", { name: "login_wuser", nullable: true, length: 20 })
+  @Column("varchar", {
+    name: "login_wuser",
+    nullable: true,
+    unique: true,
+    length: 20,
+  })
   loginWuser: string | null;
 
   @Column("varchar", { name: "password_wuser", nullable: true, length: 20, select: false })

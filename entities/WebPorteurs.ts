@@ -5,26 +5,41 @@ export class WebPorteurs {
   @PrimaryGeneratedColumn({ type: "int", name: "ref_wdotporteur" })
   refWdotporteur: number;
 
-  @Column("int", { name: "refprojet_wdotporteur", nullable: true })
-  refprojetWdotporteur: number | null;
+  @Column("int", { name: "refacteur_wdotporteur", nullable: true })
+  refacteurWdotporteur: number | null;
+
+  @Column("int", { name: "refcontrat_wdotporteur", nullable: true })
+  refcontratWdotporteur: number | null;
 
   @Column("int", { name: "refsite_wdotporteur", nullable: true })
   refsiteWdotporteur: number | null;
 
-  @Column("varchar", { name: "codesite_wdotporteur", length: 50 })
-  codesiteWdotporteur: string;
+  @Column("varchar", {
+    name: "codesite_wdotporteur",
+    nullable: true,
+    length: 50,
+  })
+  codesiteWdotporteur: string | null;
 
   @Column("int", { name: "refdep_wdotporteur", nullable: true })
   refdepWdotporteur: number | null;
 
-  @Column("varchar", { name: "codedep_wdotporteur", length: 50 })
-  codedepWdotporteur: string;
+  @Column("varchar", {
+    name: "codedep_wdotporteur",
+    nullable: true,
+    length: 50,
+  })
+  codedepWdotporteur: string | null;
 
   @Column("int", { name: "refmetier_wdotporteur", nullable: true })
   refmetierWdotporteur: number | null;
 
-  @Column("varchar", { name: "metier_wdotporteur", length: 200 })
-  metierWdotporteur: string;
+  @Column("varchar", {
+    name: "metier_wdotporteur",
+    nullable: true,
+    length: 200,
+  })
+  metierWdotporteur: string | null;
 
   @Column("int", { name: "refporteur_wdotporteur", nullable: true })
   refporteurWdotporteur: number | null;
@@ -46,8 +61,8 @@ export class WebPorteurs {
   })
   nomprenomWdotporteur: string | null;
 
-  @Column("varchar", { name: "genre_wdotporteur", length: 10 })
-  genreWdotporteur: string;
+  @Column("varchar", { name: "genre_wdotporteur", nullable: true, length: 10 })
+  genreWdotporteur: string | null;
 
   @Column("int", { name: "article_ref_wdotporteur", nullable: true })
   articleRefWdotporteur: number | null;
