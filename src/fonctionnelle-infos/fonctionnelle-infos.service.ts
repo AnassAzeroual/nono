@@ -8,7 +8,7 @@ export class FonctionnelleInfosService {
     constructor(@InjectRepository(WebInfostoday) private repoWeb: Repository<WebInfostoday>,) { }
 
     async get(user) {
-        let res = await this.repoWeb.findAndCount({ where: { refinfotodayWtoday: user.refacteurWuser }, order: { ordreWtoday: 'DESC' } })
+        let res = await this.repoWeb.findAndCount({ where: { refinfotodayWtoday: user.refacteurWuser, flagWtoday: 'A' }, order: { ordreWtoday: 'DESC' } })
         if (!res) {
             throw new NotFoundException
         }
