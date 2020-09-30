@@ -6,6 +6,7 @@ async function bootstrap() {
 
   const allowedOrigins = [
     'http://localhost:4200',
+    'https://auclair.000webhostapp.com'
   ];
 
   const corsOptions = {

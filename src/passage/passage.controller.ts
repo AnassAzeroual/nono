@@ -1,6 +1,7 @@
 import { PassageService } from './passage.service';
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/auth/get-user.decorator';
 
 @Controller('passage')
 @UseGuards(AuthGuard())
@@ -8,7 +9,7 @@ export class PassageController {
     constructor(private srv: PassageService) { }
 
     @Get()
-    getPassage(@Req() req) {
-        return this.srv.getPassages(req)
+    getPassage(@GetUser() user) {
+        return this.srv.getPassages(user)
     }
 }

@@ -5,9 +5,9 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class PassageService {
-    constructor(@InjectRepository(WebPassages) private repoWeb: Repository<WebPassages>,) { }
-    async getPassages(req) {
-        let res = await this.repoWeb.findAndCount({ visuPassage: 'o' })
+    constructor(@InjectRepository(WebPassages) private repoWeb: Repository<WebPassages>) { }
+    async getPassages(user) {
+        let res = await this.repoWeb.findAndCount({ visuPassage: 'o', refacteurPassage: user.refacteurWuser })
         if (!res) {
             throw new NotFoundException
         }
