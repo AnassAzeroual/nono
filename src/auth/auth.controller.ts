@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { GetUser } from './../get-user.decorator';
+import { Body, Controller, Get, Post, Redirect, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
-import { GetUser } from './get-user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -13,6 +13,7 @@ export class AuthController {
     }
 
     @Post('/test')
+    // @Redirect('https://google.com', 302)
     @UseGuards(AuthGuard())
     test(@GetUser() user) {
         return user

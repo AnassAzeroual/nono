@@ -1,7 +1,7 @@
 import { PassageService } from './passage.service';
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/auth/get-user.decorator';
+import { GetUser } from './../../get-user.decorator';
 
 @Controller('passage')
 @UseGuards(AuthGuard())

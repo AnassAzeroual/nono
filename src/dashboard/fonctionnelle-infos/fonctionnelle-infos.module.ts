@@ -1,4 +1,4 @@
-import { WebInfostoday } from './../../entities/WebInfostoday';
+import { WebInfostoday } from '../../../entities/WebInfostoday';
 import { Module } from '@nestjs/common';
 import { FonctionnelleInfosController } from './fonctionnelle-infos.controller';
 import { FonctionnelleInfosService } from './fonctionnelle-infos.service';

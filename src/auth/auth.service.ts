@@ -29,7 +29,7 @@ export class AuthService {
         const payload: jwtPayload = {
             login: user.loginWuser,
             name: `${user.nomWuser} ${user.prenomWuser}`,
-            role: (user.refprofilWuser === 3) ? 'admin' : (user.refprofilWuser === 0) ? 'client' : 'lol'
+            roles: (user.refprofilWuser === 3) ? 'admin' : (user.refprofilWuser === 0) ? 'client' : 'lol'
         }
         const accessToken = await this.srvJWT.sign(payload)
         return { accessToken }
