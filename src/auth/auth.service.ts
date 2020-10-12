@@ -16,19 +16,20 @@ export class AuthService {
     /* -------------------------------------------------------------------------- */
     /*                                    login                                   */
     /* -------------------------------------------------------------------------- */
-    async signup(data): Promise<{ accessToken: string }> {
+    async signup(data: { login: string, password: string }): Promise<{ accessToken: string }> {
         // const salt = await bcrypt.genSalt(); // Not now
 
         const res = await this.repoWebUsers.findAndCount({ where: { loginWuser: data.login, passwordWuser: data.password } });
-        let exist = res[1]
+        const exist = res[1]
         const check = (exist === 1) ? true : false
         if (!check) {
             throw new UnauthorizedException('Invalid Credentials!')
         }
-        let user = res[0][0]
+        const user = res[0][0]
         const payload: jwtPayload = {
             login: user.loginWuser,
             name: `${user.nomWuser} ${user.prenomWuser}`,
+            ref: user.refacteurWuser,
             roles: (user.refprofilWuser === 3) ? 'admin' : (user.refprofilWuser === 0) ? 'client' : 'lol'
         }
         const accessToken = await this.srvJWT.sign(payload)
