@@ -1,4 +1,4 @@
-import { WebArticles } from './../../../entities/WebArticles';
+import { WebPorteurs } from './../../../entities/WebPorteurs';
 import { Module } from '@nestjs/common';
 import { HabillementproController } from './habillementpro.controller';
 import { HabillementproService } from './habillementpro.service';
@@ -8,9 +8,9 @@ import { PassportModule } from '@nestjs/passport';
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    TypeOrmModule.forFeature([WebArticles]),
+    TypeOrmModule.forFeature([WebPorteurs]),
   ],
   controllers: [HabillementproController],
   providers: [HabillementproService]
 })
-export class HabillementproModule {}
+export class HabillementproModule { }

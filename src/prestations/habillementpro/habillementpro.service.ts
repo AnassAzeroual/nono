@@ -1,73 +1,98 @@
+import { WebPorteurs } from './../../../entities/WebPorteurs';
 import { InterfaceQuery } from '../../helpers/interface.query';
-import { WebArticles } from './../../../entities/WebArticles';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Any, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
+import search from './interface';
 
 @Injectable()
 export class HabillementproService {
     constructor(
-        @InjectRepository(WebArticles) private repoWebarticles: Repository<WebArticles>
+        @InjectRepository(WebPorteurs) private repoWebPorteurs: Repository<WebPorteurs>
     ) { }
 
-    readAll(query: InterfaceQuery, refacteurArtweb: number): Promise<unknown> {
+    async getFilterData(refacteurWdotporteur: number): Promise<unknown> {
 
-        return this.repoWebarticles.findAndCount(
-            {
-                where: { flagArtweb: 'A', refacteurArtweb },
-                order: { intitulearticleArtweb: query.order },
-                take: query.take,
-                skip: query.skip
-            }
-        )
+        const obj_contart = await this.repoWebPorteurs.query
+            (
+                `SELECT refcontrat_wdotporteur as id
+                FROM web_porteurs
+                WHERE flag_wdotporteur = 'A'
+                and refacteur_wdotporteur = ${refacteurWdotporteur}
+                group by refcontrat_wdotporteur`
+            )
+        const obj_site = await this.repoWebPorteurs.query
+            (
+                `SELECT refsite_wdotporteur as id,
+                codesite_wdotporteur as name
+                FROM web_porteurs
+                WHERE flag_wdotporteur = 'A'
+                and refacteur_wdotporteur = ${refacteurWdotporteur}
+                group by refsite_wdotporteur`
+            )
+        const obj_depot = await this.repoWebPorteurs.query
+            (
+                `SELECT refdep_wdotporteur as id,
+                codedep_wdotporteur as name
+                FROM web_porteurs
+                WHERE flag_wdotporteur = 'A'
+                and refacteur_wdotporteur = ${refacteurWdotporteur}
+                group by refdep_wdotporteur`
+            )
+        const obj_metier = await this.repoWebPorteurs.query
+            (
+                `SELECT refmetier_wdotporteur as id,
+                metier_wdotporteur as name
+                FROM web_porteurs
+                WHERE flag_wdotporteur = 'A'
+                and refacteur_wdotporteur = ${refacteurWdotporteur}
+                group by refmetier_wdotporteur`
+            )
+
+        return { res: { obj_contart, obj_site, obj_depot, obj_metier } }
+        return this.repoWebPorteurs.query(`SELECT refcontrat_wdotporteur,
+          refsite_wdotporteur,
+          codesite_wdotporteur,
+          refdep_wdotporteur,
+          codedep_wdotporteur,
+          refmetier_wdotporteur,
+          metier_wdotporteur,
+          FROM web_porteurs
+          group by refsite_wdotporteur,refdep_wdotporteur,refmetier_wdotporteur`)
     }
 
-    async getFilterData(refacteurArtweb: number): Promise<unknown> {
-        const datarefcontratArtweb: any = await this.repoWebarticles.find({
-            where: { flagArtweb: 'A', refacteurArtweb },
-            select: ["refcontratArtweb"]
-        })
-        const datarefsiteArtweb: any = await this.repoWebarticles.find({
-            where: { flagArtweb: 'A', refacteurArtweb },
-            select: ["refsiteArtweb"]
-        })
-        const datarefdepArtweb: any = await this.repoWebarticles.find({
-            where: { flagArtweb: 'A', refacteurArtweb },
-            select: ["refdepArtweb"]
-        })
-        const datarefmetierArtweb: any = await this.repoWebarticles.find({
-            where: { flagArtweb: 'A', refacteurArtweb },
-            select: ["refmetierArtweb"]
-        })
-        const seen = new Set();
+    async search(query: InterfaceQuery, refacteur_wdotporteur: number, search: search): Promise<unknown> {
+        const res = await this.repoWebPorteurs.query(`SELECT
+        codesite_wdotporteur,
+        codedep_wdotporteur,
+        metier_wdotporteur,
+        article_intitule_wdotporteur,
+        article_ref_wdotporteur,
+        qtepardotation_wdotporteur,
+        matricule_wdotporteur,
+        nomprenom_wdotporteur,
+        genre_wdotporteur,
+        taille_wdotporteur,
+        count(refporteur_wdotporteur) as count
 
-        const acteur = await datarefcontratArtweb.filter(el => {
-            const duplicate = seen.has(el.refcontratArtweb);
-            seen.add(el.refcontratArtweb);
-            return !duplicate;
-        });
+        FROM
+        web_porteurs
 
-        const site = await datarefsiteArtweb.filter(el => {
-            const duplicate = seen.has(el.refsiteArtweb);
-            seen.add(el.refsiteArtweb);
-            return !duplicate;
-        });
+        WHERE 
+        flag_wdotporteur='A'
+        and refacteur_wdotporteur =${refacteur_wdotporteur}
+        and web_porteurs.refcontrat_wdotporteur LIKE '${search.contrat}%'
+        and web_porteurs.refsite_wdotporteur like '${search.site}%'
+        and web_porteurs.refdep_wdotporteur like '${search.dept}%'
+        and web_porteurs.refmetier_wdotporteur like '${search.metier}%'
 
-        const depArtweb = await datarefdepArtweb.filter(el => {
-            const duplicate = seen.has(el.refdepArtweb);
-            seen.add(el.refdepArtweb);
-            return !duplicate;
-        });
+        
+        group by article_ref_wdotporteur
 
-        const metierArtweb = await datarefmetierArtweb.filter(el => {
-            const duplicate = seen.has(el.refmetierArtweb);
-            seen.add(el.refmetierArtweb);
-            return !duplicate;
-        });
+        order by article_intitule_wdotporteur
+        LIMIT ${query.take} OFFSET ${query.skip}
+        `);
 
-
-        return await {
-            res: { acteur, site, depArtweb, metierArtweb }
-        }
+        return { res }
     }
 }
