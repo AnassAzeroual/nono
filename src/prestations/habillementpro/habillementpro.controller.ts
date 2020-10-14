@@ -11,8 +11,11 @@ import search from './interface';
 export class HabillementproController {
     constructor(private srv: HabillementproService) { }
 
-    @Post()
+    @Post('search')
     getdata(@Query() query: InterfaceQuery, @GetUser() user: WebUsers, @Body() search: search): Promise<unknown> {
+        console.log(query);
+        console.log(search);
+
         return this.srv.search(query, user.refacteurWuser, search)
     }
 

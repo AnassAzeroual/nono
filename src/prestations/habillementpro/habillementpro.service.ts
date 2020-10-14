@@ -63,6 +63,7 @@ export class HabillementproService {
 
     async search(query: InterfaceQuery, refacteur_wdotporteur: number, search: search): Promise<unknown> {
         const res = await this.repoWebPorteurs.query(`SELECT
+        ref_wdotporteur,
         codesite_wdotporteur,
         codedep_wdotporteur,
         metier_wdotporteur,
