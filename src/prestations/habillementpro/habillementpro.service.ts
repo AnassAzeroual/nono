@@ -62,6 +62,10 @@ export class HabillementproService {
     }
 
     async search(query: InterfaceQuery, refacteur_wdotporteur: number, search: search): Promise<unknown> {
+        search.contrat = (search.contrat.length < 1) ? '%' : search.contrat
+        search.site = (search.site.length < 1) ? '%' : search.site
+        search.dept = (search.dept.length < 1) ? '%' : search.dept
+        search.metier = (search.metier.length < 1) ? '%' : search.metier
         const res = await this.repoWebPorteurs.query(`SELECT
         ref_wdotporteur,
         codesite_wdotporteur,
@@ -82,10 +86,10 @@ export class HabillementproService {
         WHERE 
         flag_wdotporteur='A'
         and refacteur_wdotporteur =${refacteur_wdotporteur}
-        and web_porteurs.refcontrat_wdotporteur LIKE '${search.contrat}%'
-        and web_porteurs.refsite_wdotporteur like '${search.site}%'
-        and web_porteurs.refdep_wdotporteur like '${search.dept}%'
-        and web_porteurs.refmetier_wdotporteur like '${search.metier}%'
+        and web_porteurs.refcontrat_wdotporteur LIKE '${search.contrat}'
+        and web_porteurs.refsite_wdotporteur like '${search.site}'
+        and web_porteurs.refdep_wdotporteur like '${search.dept}'
+        and web_porteurs.refmetier_wdotporteur like '${search.metier}'
 
         
         group by article_ref_wdotporteur
