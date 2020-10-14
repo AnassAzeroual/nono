@@ -1,1 +1,1 @@
-export default interface search { contrat, site, dept, metier }
+export default interface search { contrat, site, dept, metier, detail }

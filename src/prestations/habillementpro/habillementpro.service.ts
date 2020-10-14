@@ -62,42 +62,107 @@ export class HabillementproService {
     }
 
     async search(query: InterfaceQuery, refacteur_wdotporteur: number, search: search): Promise<unknown> {
+        let data = []
+        let toCount = []
         search.contrat = (search.contrat.length < 1) ? '%' : search.contrat
         search.site = (search.site.length < 1) ? '%' : search.site
         search.dept = (search.dept.length < 1) ? '%' : search.dept
         search.metier = (search.metier.length < 1) ? '%' : search.metier
-        const res = await this.repoWebPorteurs.query(`SELECT
-        ref_wdotporteur,
-        codesite_wdotporteur,
-        codedep_wdotporteur,
-        metier_wdotporteur,
-        article_intitule_wdotporteur,
-        article_ref_wdotporteur,
-        qtepardotation_wdotporteur,
-        matricule_wdotporteur,
-        nomprenom_wdotporteur,
-        genre_wdotporteur,
-        taille_wdotporteur,
-        count(refporteur_wdotporteur) as count
+        data = await this.repoWebPorteurs.query(this.queryFunc(refacteur_wdotporteur, search, query));
+        if (search.detail) {
+            toCount = await this.repoWebPorteurs.query(`SELECT
+            refacteur_wdotporteur
+            
+            FROM
+            web_porteurs
 
-        FROM
-        web_porteurs
+            WHERE 
+            flag_wdotporteur='A'
+            and refacteur_wdotporteur =${refacteur_wdotporteur}
+            and web_porteurs.refcontrat_wdotporteur LIKE '${search.contrat}'
+            and web_porteurs.refsite_wdotporteur like '${search.site}'
+            and web_porteurs.refdep_wdotporteur like '${search.dept}'
+            and web_porteurs.refmetier_wdotporteur like '${search.metier}'`)
+        } else {
+            toCount = await this.repoWebPorteurs.query(`SELECT
+            codesite_wdotporteur,refsite_wdotporteur,article_ref_wdotporteur
+            
+            FROM
+            web_porteurs
+            
+            WHERE 
+            flag_wdotporteur='A'
+            and refacteur_wdotporteur =${refacteur_wdotporteur}
+            and web_porteurs.refcontrat_wdotporteur LIKE '${search.contrat}'
+            and web_porteurs.refsite_wdotporteur like '${search.site}'
+            and web_porteurs.refdep_wdotporteur like '${search.dept}'
+            and web_porteurs.refmetier_wdotporteur like '${search.metier}'
+            
+            group by article_ref_wdotporteur,refsite_wdotporteur`)
+        }
 
-        WHERE 
-        flag_wdotporteur='A'
-        and refacteur_wdotporteur =${refacteur_wdotporteur}
-        and web_porteurs.refcontrat_wdotporteur LIKE '${search.contrat}'
-        and web_porteurs.refsite_wdotporteur like '${search.site}'
-        and web_porteurs.refdep_wdotporteur like '${search.dept}'
-        and web_porteurs.refmetier_wdotporteur like '${search.metier}'
+        return { data, count: toCount.length }
+    }
 
-        
-        group by article_ref_wdotporteur
-
-        order by article_intitule_wdotporteur
-        LIMIT ${query.take} OFFSET ${query.skip}
-        `);
-
-        return { res }
+    private queryFunc(refacteur_wdotporteur: number, search: search, query: InterfaceQuery): string {
+        let queryString = ""
+        if (search.detail) {
+            queryString = `SELECT
+            ref_wdotporteur,
+            codesite_wdotporteur,
+            codedep_wdotporteur,
+            metier_wdotporteur,
+            article_intitule_wdotporteur,
+            article_ref_wdotporteur,
+            qtepardotation_wdotporteur,
+            matricule_wdotporteur,
+            nomprenom_wdotporteur,
+            genre_wdotporteur,
+            taille_wdotporteur
+    
+            FROM
+            web_porteurs
+    
+            WHERE 
+            flag_wdotporteur='A'
+            and refacteur_wdotporteur =${refacteur_wdotporteur}
+            and web_porteurs.refcontrat_wdotporteur LIKE '${search.contrat}'
+            and web_porteurs.refsite_wdotporteur like '${search.site}'
+            and web_porteurs.refdep_wdotporteur like '${search.dept}'
+            and web_porteurs.refmetier_wdotporteur like '${search.metier}'
+    
+            order by article_intitule_wdotporteur
+            LIMIT ${query.take} OFFSET ${query.skip}
+            `;
+        } else {
+            queryString = `SELECT
+            ref_wdotporteur,
+            codesite_wdotporteur,
+            codedep_wdotporteur,
+            metier_wdotporteur,
+            article_intitule_wdotporteur,
+            article_ref_wdotporteur,
+            qtepardotation_wdotporteur,
+            count(refporteur_wdotporteur) as count
+    
+            FROM
+            web_porteurs
+    
+            WHERE 
+            flag_wdotporteur='A'
+            and refacteur_wdotporteur =${refacteur_wdotporteur}
+            and web_porteurs.refcontrat_wdotporteur LIKE '${search.contrat}'
+            and web_porteurs.refsite_wdotporteur like '${search.site}'
+            and web_porteurs.refdep_wdotporteur like '${search.dept}'
+            and web_porteurs.refmetier_wdotporteur like '${search.metier}'
+    
+            
+            group by article_ref_wdotporteur,refsite_wdotporteur
+    
+            order by article_intitule_wdotporteur
+            LIMIT ${query.take} OFFSET ${query.skip}
+            `;
+        }
+        return queryString
     }
 }
