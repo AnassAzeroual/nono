@@ -1,3 +1,4 @@
+import { ParamListeTailles } from './../../../entities/ParamListeTailles';
 import { WebPorteurs } from './../../../entities/WebPorteurs';
 import { Module } from '@nestjs/common';
 import { HabillementproController } from './habillementpro.controller';
@@ -8,7 +9,7 @@ import { PassportModule } from '@nestjs/passport';
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    TypeOrmModule.forFeature([WebPorteurs]),
+    TypeOrmModule.forFeature([WebPorteurs, ParamListeTailles]),
   ],
   controllers: [HabillementproController],
   providers: [HabillementproService]

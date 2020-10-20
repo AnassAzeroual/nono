@@ -1,3 +1,4 @@
+import { ParamListeTailles } from './../../../entities/ParamListeTailles';
 import { WebPorteurs } from './../../../entities/WebPorteurs';
 import { InterfaceQuery } from '../../helpers/interface.query';
 import { Injectable } from '@nestjs/common';
@@ -8,57 +9,37 @@ import search from './interface';
 @Injectable()
 export class HabillementproService {
     constructor(
-        @InjectRepository(WebPorteurs) private repoWebPorteurs: Repository<WebPorteurs>
+        @InjectRepository(WebPorteurs) private repoWebPorteurs: Repository<WebPorteurs>,
+        @InjectRepository(ParamListeTailles) private repoParamListeTailles: Repository<ParamListeTailles>,
     ) { }
 
     async getFilterData(refacteurWdotporteur: number): Promise<unknown> {
 
-        const obj_contart = await this.repoWebPorteurs.query
-            (
-                `SELECT refcontrat_wdotporteur as id
-                FROM web_porteurs
-                WHERE flag_wdotporteur = 'A'
-                and refacteur_wdotporteur = ${refacteurWdotporteur}
-                group by refcontrat_wdotporteur`
-            )
-        const obj_site = await this.repoWebPorteurs.query
-            (
-                `SELECT refsite_wdotporteur as id,
-                codesite_wdotporteur as name
-                FROM web_porteurs
-                WHERE flag_wdotporteur = 'A'
-                and refacteur_wdotporteur = ${refacteurWdotporteur}
-                group by refsite_wdotporteur`
-            )
-        const obj_depot = await this.repoWebPorteurs.query
-            (
-                `SELECT refdep_wdotporteur as id,
-                codedep_wdotporteur as name
-                FROM web_porteurs
-                WHERE flag_wdotporteur = 'A'
-                and refacteur_wdotporteur = ${refacteurWdotporteur}
-                group by refdep_wdotporteur`
-            )
-        const obj_metier = await this.repoWebPorteurs.query
-            (
-                `SELECT refmetier_wdotporteur as id,
-                metier_wdotporteur as name
-                FROM web_porteurs
-                WHERE flag_wdotporteur = 'A'
-                and refacteur_wdotporteur = ${refacteurWdotporteur}
-                group by refmetier_wdotporteur`
-            )
+        const obj_contart = await this.queryFilterMaker(
+            refacteurWdotporteur,
+            "refcontrat_wdotporteur as id FROM web_porteurs",
+            "group by refcontrat_wdotporteur"
+        )
+
+        const obj_site = await this.queryFilterMaker(
+            refacteurWdotporteur,
+            "refsite_wdotporteur as id,codesite_wdotporteur as name FROM web_porteurs",
+            "group by refsite_wdotporteur"
+        )
+
+        const obj_depot = await this.queryFilterMaker(
+            refacteurWdotporteur,
+            "refdep_wdotporteur as id,codedep_wdotporteur as name FROM web_porteurs",
+            "group by refdep_wdotporteur"
+        )
+
+        const obj_metier = await this.queryFilterMaker(
+            refacteurWdotporteur,
+            "refmetier_wdotporteur as id,metier_wdotporteur as name FROM web_porteurs",
+            "group by refmetier_wdotporteur"
+        )
 
         return { res: { obj_contart, obj_site, obj_depot, obj_metier } }
-        return this.repoWebPorteurs.query(`SELECT refcontrat_wdotporteur,
-          refsite_wdotporteur,
-          codesite_wdotporteur,
-          refdep_wdotporteur,
-          codedep_wdotporteur,
-          refmetier_wdotporteur,
-          metier_wdotporteur,
-          FROM web_porteurs
-          group by refsite_wdotporteur,refdep_wdotporteur,refmetier_wdotporteur`)
     }
 
     async search(query: InterfaceQuery, refacteur_wdotporteur: number, search: search): Promise<unknown> {
@@ -70,22 +51,38 @@ export class HabillementproService {
         search.metier = (search.metier.length < 1) ? '%' : search.metier
         data = await this.repoWebPorteurs.query(this.queryFunc(refacteur_wdotporteur, search, query));
         if (search.detail) {
-            toCount = await this.repoWebPorteurs.query(`SELECT
-            refacteur_wdotporteur
-            
-            FROM
-            web_porteurs
-
-            WHERE 
-            flag_wdotporteur='A'
-            and refacteur_wdotporteur =${refacteur_wdotporteur}
-            and web_porteurs.refcontrat_wdotporteur LIKE '${search.contrat}'
-            and web_porteurs.refsite_wdotporteur like '${search.site}'
-            and web_porteurs.refdep_wdotporteur like '${search.dept}'
-            and web_porteurs.refmetier_wdotporteur like '${search.metier}'`)
+            toCount = await this.toCountData(toCount, refacteur_wdotporteur, search);
         } else {
-            toCount = await this.repoWebPorteurs.query(`SELECT
-            codesite_wdotporteur,refsite_wdotporteur,article_ref_wdotporteur
+            const data = { select_data: ",refsite_wdotporteur,article_ref_wdotporteur", group_by: " group by article_ref_wdotporteur,refsite_wdotporteur" }
+            toCount = await this.toCountData(toCount, refacteur_wdotporteur, search, data);
+        }
+
+        // if detail true ADD taille options (xs m l s ...)
+        data = await this.addTailleOptions(search, data);
+
+
+        return { data, count: toCount.length }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Helpers functions
+    private async toCountData(toCount: any[], refacteur_wdotporteur: number, search: search, data: any = { select_data: "", group_by: "" }) {
+        toCount = await this.repoWebPorteurs.query(`SELECT
+            codesite_wdotporteur${data.select_data}
             
             FROM
             web_porteurs
@@ -97,11 +94,9 @@ export class HabillementproService {
             and web_porteurs.refsite_wdotporteur like '${search.site}'
             and web_porteurs.refdep_wdotporteur like '${search.dept}'
             and web_porteurs.refmetier_wdotporteur like '${search.metier}'
-            
-            group by article_ref_wdotporteur,refsite_wdotporteur`)
-        }
-
-        return { data, count: toCount.length }
+            ${data.group_by}
+            `);
+        return toCount;
     }
 
     private queryFunc(refacteur_wdotporteur: number, search: search, query: InterfaceQuery): string {
@@ -118,7 +113,8 @@ export class HabillementproService {
             matricule_wdotporteur,
             nomprenom_wdotporteur,
             genre_wdotporteur,
-            taille_wdotporteur
+            taille_wdotporteur,
+            refgrilletaille_wdotporteur
     
             FROM
             web_porteurs
@@ -164,5 +160,34 @@ export class HabillementproService {
             `;
         }
         return queryString
+    }
+
+    async getTaillsByCategorieID(id: number): Promise<ParamListeTailles[]> {
+        return await this.repoParamListeTailles.find({
+            where: { refgrilletailleTaille: id, etatTaille: 'A' },
+            select: ['refTaille', 'intituleTaille'],
+            order: { ordreTaille: 'ASC' }
+        })
+    }
+
+    private async queryFilterMaker(refacteurWdotporteur: number, select: string, group: string) {
+        return await this.repoWebPorteurs.query(
+            `SELECT ${select}
+                WHERE flag_wdotporteur = 'A' 
+                and refacteur_wdotporteur = ${refacteurWdotporteur} 
+                ${group}`
+        );
+    }
+
+    private async addTailleOptions(search: search, data: any[]) {
+        if (search.detail) {
+            const dataCopie = data;
+            for (let i = 0; i < dataCopie.length; i++) {
+                const item = dataCopie[i];
+                data[i]['taille_Options'] = await this.getTaillsByCategorieID(item.refgrilletaille_wdotporteur);
+            }
+        }
+
+        return data
     }
 }
