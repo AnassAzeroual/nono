@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import search from './interface';
+import { promises } from 'dns';
 
 @Injectable()
 export class HabillementproService {
@@ -64,7 +65,16 @@ export class HabillementproService {
         return { data, count: toCount.length }
     }
 
+    getPorteurByID(id: number): Promise<WebPorteurs> {
+        return this.repoWebPorteurs.findOne({ refWdotporteur: id })
+    }
 
+    updateTaille(data: unknown, newData: unknown): Promise<WebPorteurs> {
+        Object.keys(newData).forEach((key) => {
+            data[key] = newData[key];
+        });
+        return this.repoWebPorteurs.save(data)
+    }
 
 
 

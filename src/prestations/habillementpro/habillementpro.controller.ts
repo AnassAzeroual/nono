@@ -1,8 +1,9 @@
+import { WebPorteurs } from './../../../entities/WebPorteurs';
 import { GetUser } from './../../get-user.decorator';
 import { WebUsers } from './../../../entities/WebUsers';
 import { InterfaceQuery } from '../../helpers/interface.query';
 import { HabillementproService } from './habillementpro.service';
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import search from './interface';
 
@@ -19,5 +20,11 @@ export class HabillementproController {
     @Get('/filter')
     getdataFilter(@GetUser() user: WebUsers): Promise<unknown> {
         return this.srv.getFilterData(user.refacteurWuser)
+    }
+
+    @Put()
+    updateTaille(@Body(): data:unknown): Promise<WebPorteurs>
+    {
+
     }
 }
