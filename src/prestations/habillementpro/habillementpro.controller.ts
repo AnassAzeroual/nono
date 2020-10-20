@@ -1,11 +1,11 @@
-import { WebPorteurs } from './../../../entities/WebPorteurs';
 import { GetUser } from './../../get-user.decorator';
 import { WebUsers } from './../../../entities/WebUsers';
 import { InterfaceQuery } from '../../helpers/interface.query';
 import { HabillementproService } from './habillementpro.service';
 import { Body, Controller, Get, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import search from './interface';
+import search, { InterfaceUpdateTaille } from './interface';
+
 
 @Controller('habillementpro')
 @UseGuards(AuthGuard())
@@ -23,8 +23,7 @@ export class HabillementproController {
     }
 
     @Put()
-    updateTaille(@Body(): data:unknown): Promise<WebPorteurs>
-    {
-
+    updateTaille(@Body() data: InterfaceUpdateTaille): Promise<any> {
+        return this.srv.updateTaille(data)
     }
 }

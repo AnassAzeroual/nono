@@ -4,8 +4,7 @@ import { InterfaceQuery } from '../../helpers/interface.query';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import search from './interface';
-import { promises } from 'dns';
+import search, { InterfaceUpdateTaille } from './interface';
 
 @Injectable()
 export class HabillementproService {
@@ -69,11 +68,15 @@ export class HabillementproService {
         return this.repoWebPorteurs.findOne({ refWdotporteur: id })
     }
 
-    updateTaille(data: unknown, newData: unknown): Promise<WebPorteurs> {
+    async updateTaille(newData: InterfaceUpdateTaille): Promise<any> {
+        const data = await this.getPorteurByID(newData.refWdotporteur)
+
         Object.keys(newData).forEach((key) => {
             data[key] = newData[key];
         });
-        return this.repoWebPorteurs.save(data)
+
+        const res = this.repoWebPorteurs.save(data)
+        return { taille: (await res).tailleWdotporteur, id: (await res).refWdotporteur }
     }
 
 
