@@ -101,7 +101,7 @@ export class HabillementproService {
             web_porteurs
             
             WHERE 
-            flag_wdotporteur ='A'
+            flag_wdotporteur='A'
             and refacteur_wdotporteur =${refacteur_wdotporteur}
             and web_porteurs.refcontrat_wdotporteur LIKE '${search.contrat}'
             and web_porteurs.refsite_wdotporteur like '${search.site}'
@@ -116,7 +116,6 @@ export class HabillementproService {
         let queryString = ""
         if (search.detail) {
             queryString = `SELECT
-            etat_wdotporteur,
             ref_wdotporteur,
             codesite_wdotporteur,
             codedep_wdotporteur,
@@ -134,7 +133,7 @@ export class HabillementproService {
             web_porteurs
     
             WHERE 
-            flag_wdotporteur = 'A'
+            flag_wdotporteur='A'
             and etat_wdotporteur LIKE 'A%'
             and refacteur_wdotporteur =${refacteur_wdotporteur}
             and web_porteurs.refcontrat_wdotporteur LIKE '${search.contrat}'
@@ -160,7 +159,7 @@ export class HabillementproService {
             web_porteurs
     
             WHERE 
-            flag_wdotporteur = 'A'
+            flag_wdotporteur='A'
             and refacteur_wdotporteur =${refacteur_wdotporteur}
             and web_porteurs.refcontrat_wdotporteur LIKE '${search.contrat}'
             and web_porteurs.refsite_wdotporteur like '${search.site}'
@@ -188,7 +187,7 @@ export class HabillementproService {
     private async queryFilterMaker(refacteurWdotporteur: number, select: string, group: string) {
         return await this.repoWebPorteurs.query(
             `SELECT ${select}
-                WHERE flag_wdotporteur ='A' 
+                WHERE flag_wdotporteur = 'A' 
                 and refacteur_wdotporteur = ${refacteurWdotporteur} 
                 ${group}`
         );
