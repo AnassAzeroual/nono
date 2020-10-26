@@ -116,6 +116,7 @@ export class HabillementproService {
         let queryString = ""
         if (search.detail) {
             queryString = `SELECT
+            etat_wdotporteur,
             ref_wdotporteur,
             codesite_wdotporteur,
             codedep_wdotporteur,

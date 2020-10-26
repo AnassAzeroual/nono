@@ -30,7 +30,7 @@ export class AuthService {
             login: user.loginWuser,
             name: `${user.nomWuser} ${user.prenomWuser}`,
             ref: user.refacteurWuser,
-            roles: (user.refprofilWuser === 3) ? 'admin' : (user.refprofilWuser === 0) ? 'client' : 'lol'
+            roles: user.refprofilWuser,
         }
         const accessToken = await this.srvJWT.sign(payload)
         return { accessToken }
