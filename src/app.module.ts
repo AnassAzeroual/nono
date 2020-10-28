@@ -6,6 +6,7 @@ import { FonctionnelleInfosModule } from './dashboard/fonctionnelle-infos/foncti
 import { HabillementproModule } from './prestations/habillementpro/habillementpro.module';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './http-exception.filter';
+import { SpaceModule } from './space/space.module';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { HttpExceptionFilter } from './http-exception.filter';
     AuthModule,
     PassageModule,
     FonctionnelleInfosModule,
-    HabillementproModule
+    HabillementproModule,
+    SpaceModule
   ],
   controllers: [],
   providers: [
