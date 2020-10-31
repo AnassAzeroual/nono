@@ -1,7 +1,7 @@
 import { InterfaceQuery } from './../helpers/interface.query';
 import { GetUser } from './../get-user.decorator';
 import { WebUsers } from './../../entities/WebUsers';
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Put, Query, UseGuards, Body } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { SpaceService } from './space.service';
 
@@ -13,5 +13,10 @@ export class SpaceController {
     @Get('/search')
     getdataFilter(@Query() query: InterfaceQuery, @GetUser() user: WebUsers): Promise<WebUsers[]> {
         return this.srv.getAll(query, user.refacteurWuser)
+    }
+
+    @Put('edit/:id')
+    edit(@Param('id') id: number, @Body() user: WebUsers): Promise<unknown> {
+        return this.srv.edit(id, user)
     }
 }

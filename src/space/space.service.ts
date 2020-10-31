@@ -18,4 +18,19 @@ export class SpaceService {
         const count = res[1]
         return { data, count }
     }
+
+    getUserByID(id: number): Promise<WebUsers> {
+        return this.repoWebUsers.findOne({ refWuser: id })
+    }
+
+    async edit(id: number, data: WebUsers): Promise<unknown> {
+        const user = await this.getUserByID(id)
+
+        Object.keys(data).forEach((key) => {
+            user[key] = data[key];
+        });
+
+        const res = this.repoWebUsers.save(user)
+        return { res }
+    }
 }

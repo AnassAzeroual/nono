@@ -45,6 +45,7 @@ export class HabillementproService {
     async search(query: InterfaceQuery, refacteur_wdotporteur: number, search: search): Promise<unknown> {
         let data = []
         let toCount = []
+        let A_AV_check: any = []
         search.contrat = (search.contrat.length < 1) ? '%' : search.contrat
         search.site = (search.site.length < 1) ? '%' : search.site
         search.dept = (search.dept.length < 1) ? '%' : search.dept
@@ -56,12 +57,18 @@ export class HabillementproService {
             const data = { select_data: ",refsite_wdotporteur,article_ref_wdotporteur", group_by: " group by article_ref_wdotporteur,refsite_wdotporteur" }
             toCount = await this.toCountData(toCount, refacteur_wdotporteur, search, data);
         }
+        A_AV_check = await this.repoWebPorteurs.query(`
+        SELECT COUNT(*) as a FROM  web_porteurs
+        WHERE refacteur_wdotporteur = ${refacteur_wdotporteur}
+        AND  flag_wdotporteur = 'A'
+        AND etat_wdotporteur != 'AV'
+        OR taille_wdotporteur = ''
+        `)
 
         // if detail true ADD taille options (xs m l s ...)
         data = await this.addTailleOptions(search, data);
 
-
-        return { data, count: toCount.length }
+        return { data, count: toCount.length, dialog: false, validated: (A_AV_check[0].a == 0) ? true : false }
     }
 
     getPorteurByID(id: number): Promise<WebPorteurs> {
@@ -79,6 +86,34 @@ export class HabillementproService {
         return { taille: (await res).tailleWdotporteur, id: (await res).refWdotporteur }
     }
 
+    async saveProd(refacteurWdotporteur: number): Promise<any> {
+        const data = await this.repoWebPorteurs.findAndCount({ refacteurWdotporteur, flagWdotporteur: 'A', tailleWdotporteur: '' })
+        const search = {
+            detail: true,
+            contrat: "",
+            site: "",
+            dept: "",
+            metier: ""
+        }
+        const querysearch: InterfaceQuery = { skip: 0, take: 5, order: 'DESC' }
+        if (data[1] == 0) {
+            // chnage flagWdotporteur A => AV
+            await this.repoWebPorteurs.query(
+                `UPDATE web_porteurs SET etat_wdotporteur = 'AV'
+                WHERE refacteur_wdotporteur = ${refacteurWdotporteur} AND flag_wdotporteur = 'A'`
+            )
+            return this.search(querysearch, refacteurWdotporteur, search)
+        } else {
+
+            const queryData = await this.repoWebPorteurs.query(
+                `SELECT * FROM  web_porteurs
+                WHERE refacteur_wdotporteur = ${refacteurWdotporteur} AND flag_wdotporteur = 'A' AND taille_wdotporteur = ''`
+            )
+
+            const result = await this.addTailleOptions(search, queryData)
+            return { data: result, count: data[1], dialog: true }
+        }
+    }
 
 
 
@@ -135,7 +170,7 @@ export class HabillementproService {
     
             WHERE 
             flag_wdotporteur='A'
-            and etat_wdotporteur LIKE 'A%'
+            and etat_wdotporteur LIKE '%'
             and refacteur_wdotporteur =${refacteur_wdotporteur}
             and web_porteurs.refcontrat_wdotporteur LIKE '${search.contrat}'
             and web_porteurs.refsite_wdotporteur like '${search.site}'

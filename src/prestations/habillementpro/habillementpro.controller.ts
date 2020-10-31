@@ -12,15 +12,23 @@ import search, { InterfaceUpdateTaille } from './interface';
 export class HabillementproController {
     constructor(private srv: HabillementproService) { }
 
-    @Post('/search')
-    getdata(@Query() query: InterfaceQuery, @GetUser() user: WebUsers, @Body() search: search): Promise<unknown> {
-        return this.srv.search(query, user.refacteurWuser, search)
-    }
-
     @Get('/filter')
     getdataFilter(@GetUser() user: WebUsers): Promise<unknown> {
         return this.srv.getFilterData(user.refacteurWuser)
     }
+
+    @Get('/save')
+    validateTaile(@GetUser() user: WebUsers): Promise<any> {
+        return this.srv.saveProd(user.refacteurWuser)
+    }
+
+    @Post('/search')
+    getdata(@Query() query: InterfaceQuery, @GetUser() user: WebUsers, @Body() search: search): Promise<unknown> {
+        console.log(query);
+
+        return this.srv.search(query, user.refacteurWuser, search)
+    }
+
 
     @Put()
     updateTaille(@Body() data: InterfaceUpdateTaille): Promise<any> {
