@@ -111,7 +111,7 @@ export class HabillementproService {
             )
 
             const result = await this.addTailleOptions(search, queryData)
-            return { data: result, count: data[1], dialog: true }
+            return { data: result, count: data[1], dialog: true, validated: false }
         }
     }
 
