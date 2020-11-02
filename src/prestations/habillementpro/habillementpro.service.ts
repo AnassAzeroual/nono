@@ -240,4 +240,5 @@ export class HabillementproService {
 
         return data
     }
+
 }

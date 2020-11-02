@@ -15,6 +15,11 @@ export class SpaceController {
         return this.srv.getAll(query, user.refacteurWuser)
     }
 
+    @Get('/sites')
+    getdataSites(@GetUser() user: WebUsers): Promise<unknown> {
+        return this.srv.getAllSites(user.refacteurWuser)
+    }
+
     @Put('edit/:id')
     edit(@Param('id') id: number, @Body() user: WebUsers): Promise<unknown> {
         return this.srv.edit(id, user)

@@ -19,6 +19,19 @@ export class SpaceService {
         return { data, count }
     }
 
+    async getAllSites(refacteurWuser: number): Promise<any> {
+        const data = await this.repoWebUsers.query(`
+        SELECT 
+        refacteur_wuser as id,
+        intituleacteur_wuser as name
+        FROM web_users
+                WHERE flag_wuser = 'A' 
+                and refacteur_wuser = ${refacteurWuser} 
+                group by intituleacteur_wuser
+        `)
+        return { data }
+    }
+
     getUserByID(id: number): Promise<WebUsers> {
         return this.repoWebUsers.findOne({ refWuser: id })
     }

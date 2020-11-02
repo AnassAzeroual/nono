@@ -19,7 +19,7 @@ export class AuthService {
     async signup(data: { login: string, password: string }): Promise<{ accessToken: string }> {
         // const salt = await bcrypt.genSalt(); // Not now
 
-        const res = await this.repoWebUsers.findAndCount({ where: { loginWuser: data.login, passwordWuser: data.password } });
+        const res = await this.repoWebUsers.findAndCount({ loginWuser: data.login, passwordWuser: data.password, accesespaceWuser: 'o', etatWuser: 'A' });
         const exist = res[1]
         const check = (exist === 1) ? true : false
         if (!check) {
