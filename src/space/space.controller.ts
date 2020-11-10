@@ -1,7 +1,7 @@
 import { InterfaceQuery } from './../helpers/interface.query';
 import { GetUser } from './../get-user.decorator';
 import { WebUsers } from './../../entities/WebUsers';
-import { Controller, Get, Param, Put, Query, UseGuards, Body } from '@nestjs/common';
+import { Controller, Get, Param, Put, Query, UseGuards, Body, Post } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { SpaceService } from './space.service';
 
@@ -10,14 +10,19 @@ import { SpaceService } from './space.service';
 export class SpaceController {
     constructor(private srv: SpaceService) { }
 
-    @Get('/search')
-    getdataFilter(@Query() query: InterfaceQuery, @GetUser() user: WebUsers): Promise<WebUsers[]> {
-        return this.srv.getAll(query, user.refacteurWuser)
+    @Post('/search')
+    getdata(@Query() query: InterfaceQuery, @Body() body: unknown, @GetUser() user: WebUsers): Promise<WebUsers[]> {
+        return this.srv.getAll(body, query, user.refacteurWuser)
+    }
+
+    @Get('/filter')
+    getdataFilter(@GetUser() user: WebUsers): Promise<unknown> {
+        return this.srv.buildFilter(user.refacteurWuser)
     }
 
     @Get('/sites')
     getdataSites(@GetUser() user: WebUsers): Promise<unknown> {
-        return this.srv.getAllSites(user.refacteurWuser)
+        return this.srv.getSitesByRefActeur(user.refacteurWuser)
     }
 
     @Put('edit/:id')
