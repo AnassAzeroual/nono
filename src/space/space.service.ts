@@ -20,25 +20,50 @@ export class SpaceService {
 
     async getAll(search: unknown, paginate: InterfaceQuery, refacteurWuser: number): Promise<any> {
         console.log(search);
+        const whereData = {
+            refacteurWuser,
+        }
 
-        const res = await this.repoWebUsers.findAndCount(
-            {
-                skip: paginate.skip,
-                take: paginate.take,
-                where: {
-                    refacteurWuser,
-                }
-            }) || []
+        if (search['contrat'].length)
+            whereData['refsiteWuser'] = search['contrat']
+        if (search['site'].length)
+            whereData['refsiteWuser'] = search['site']
+        if (search['dept'].length)
+            whereData['refdepWuser'] = search['dept']
+        console.log(whereData);
+
+        const res = await this.repoWebUsers.query(`
+        SELECT
+u.ref_wuser ,
+u.refacteur_wuser AS 'refacteurWuser',
+u.intituleacteur_wuser,
+u.nom_wuser ,
+u.prenom_wuser ,
+u.accesespace_wuser ,
+u.etat_wuser ,
+c.refcontrat_wcontrat ,
+c.code_wcontrat ,
+s.ref_wsiteacteur ,
+s.intitule_wsiteacteur ,
+d.refsite_wdepsite ,
+d.intitule_wdepsite 
+ FROM web_users AS u 
+ INNER JOIN web_contrats AS c ON u.refacteur_wuser = c.refacteur_wcontrat
+ INNER JOIN web_acteurs_sites AS s ON u.refacteur_wuser = s.refacteur_wsiteacteur
+ INNER JOIN web_acteurs_sites_departements AS d ON u.refacteur_wuser = d.refacteur_wdepsite
+ WHERE c.refcontrat_wcontrat = 2 AND s.ref_wsiteacteur = 5 AND d.refsite_wdepsite = 5
+ GROUP BY u.nom_wuser
+        `)
         const data = await this.buildSpace(res);
-        const count = res[1]
-        return await this.getContartsByIdActeur(refacteurWuser)
+        const count = 0
+        return await { data, count }
     }
 
     private async buildSpace(res) {
-        const data = res[0];
-        if (res[0]) {
-            for (let i = 0; i < res[0].length; i++) {
-                const user = res[0][i];
+        const data = res;
+        if (res) {
+            for (let i = 0; i < res.length; i++) {
+                const user = res[i];
                 data[i]['sites'] = await this.getSitesByRefActeur(user.refacteurWuser);
             }
         }

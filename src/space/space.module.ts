@@ -6,7 +6,7 @@ import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SpaceController } from './space.controller';
 import { SpaceService } from './space.service';
-import { WebActeursSites } from 'entities/WebActeursSites';
+import { WebActeursSites } from './../../entities/WebActeursSites';
 
 @Module({
   imports: [
