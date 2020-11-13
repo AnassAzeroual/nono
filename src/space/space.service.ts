@@ -18,48 +18,62 @@ export class SpaceService {
     ) { }
 
 
-    async getAll(search: unknown, paginate: InterfaceQuery, refacteurWuser: number): Promise<any> {
-        console.log(search);
-        const whereData = {
-            refacteurWuser,
-        }
-
-        if (search['contrat'].length)
-            whereData['refsiteWuser'] = search['contrat']
-        if (search['site'].length)
-            whereData['refsiteWuser'] = search['site']
-        if (search['dept'].length)
-            whereData['refdepWuser'] = search['dept']
-        console.log(whereData);
-
-        const res = await this.repoWebUsers.query(`
+    async getAll(search: { contrat: number | string, site: number | string, dept: number | string, metier: number | string }, paginate: InterfaceQuery, refacteurWuser: number): Promise<any> {
+        // Update Veribles like 😎
+        search.contrat = (search.contrat != 0) ? search.contrat : '%';
+        search.site = (search.site != 0) ? search.site : '%';
+        search.dept = (search.dept != 0) ? search.dept : '%';
+        // Query in Variable 🎈
+        const dataSearch = `
         SELECT
-u.ref_wuser ,
-u.refacteur_wuser AS 'refacteurWuser',
-u.intituleacteur_wuser,
-u.nom_wuser ,
-u.prenom_wuser ,
-u.accesespace_wuser ,
-u.etat_wuser ,
-c.refcontrat_wcontrat ,
-c.code_wcontrat ,
-s.ref_wsiteacteur ,
-s.intitule_wsiteacteur ,
-d.refsite_wdepsite ,
-d.intitule_wdepsite 
- FROM web_users AS u 
- INNER JOIN web_contrats AS c ON u.refacteur_wuser = c.refacteur_wcontrat
- INNER JOIN web_acteurs_sites AS s ON u.refacteur_wuser = s.refacteur_wsiteacteur
- INNER JOIN web_acteurs_sites_departements AS d ON u.refacteur_wuser = d.refacteur_wdepsite
- WHERE c.refcontrat_wcontrat = 2 AND s.ref_wsiteacteur = 5 AND d.refsite_wdepsite = 5
- GROUP BY u.nom_wuser
-        `)
+            u.ref_wuser,
+            u.refacteur_wuser AS refacteurWuser,
+            s.ref_wsiteacteur,
+            s.intitule_wsiteacteur,
+            d.intitule_wdepsite,
+            u.nom_wuser ,
+            u.prenom_wuser ,
+            u.accesespace_wuser ,
+            u.etat_wuser
+            FROM web_users AS u 
+            INNER JOIN web_contrats AS c ON u.refacteur_wuser = c.refacteur_wcontrat
+            INNER JOIN web_acteurs_sites AS s ON u.refsite_wuser = s.ref_wsiteacteur
+            INNER JOIN web_acteurs_sites_departements AS d ON u.refdep_wuser = d.ref_wdepsite
+            WHERE u.refacteur_wuser = ${refacteurWuser} 
+            AND s.ref_wsiteacteur LIKE '${search.site}' 
+            AND c.refcontrat_wcontrat LIKE '${search.contrat}' 
+            AND d.refsite_wdepsite LIKE '${search.dept}'
+        
+        GROUP BY u.login_wuser,u.password_wuser
+        ORDER BY s.intitule_wsiteacteur ,d.ordre_wdepsite,u.nom_wuser ,u.prenom_wuser
+        LIMIT ${paginate.skip},${paginate.take}
+        `
+        const dataCount = `
+        SELECT
+            *
+            FROM web_users AS u 
+            INNER JOIN web_contrats AS c ON u.refacteur_wuser = c.refacteur_wcontrat
+            INNER JOIN web_acteurs_sites AS s ON u.refsite_wuser = s.ref_wsiteacteur
+            INNER JOIN web_acteurs_sites_departements AS d ON u.refdep_wuser = d.ref_wdepsite
+            WHERE u.refacteur_wuser = ${refacteurWuser} 
+            AND s.ref_wsiteacteur LIKE '${search.site}' 
+            AND c.refcontrat_wcontrat LIKE '${search.contrat}' 
+            AND d.refsite_wdepsite LIKE '${search.dept}'
+            GROUP BY u.login_wuser,u.password_wuser
+        `
+        // Get data search with search and paginated
+        const res = await this.repoWebUsers.query(dataSearch)
+        // Add Sites for options update
         const data = await this.buildSpace(res);
-        const count = 0
-        return await { data, count }
+        // Get Count with search parames for pagination
+        const count = await this.repoWebUsers.query(dataCount)
+        // return Rsultes data + count 
+        return await { data, count: Number(count.length) }
     }
 
     private async buildSpace(res) {
+        console.log(res);
+
         const data = res;
         if (res) {
             for (let i = 0; i < res.length; i++) {

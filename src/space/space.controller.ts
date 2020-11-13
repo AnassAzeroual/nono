@@ -11,7 +11,7 @@ export class SpaceController {
     constructor(private srv: SpaceService) { }
 
     @Post('/search')
-    getdata(@Query() query: InterfaceQuery, @Body() body: unknown, @GetUser() user: WebUsers): Promise<WebUsers[]> {
+    getdata(@Query() query: InterfaceQuery, @Body() body: { contrat: number, site: number, dept: number, metier: number }, @GetUser() user: WebUsers): Promise<WebUsers[]> {
         return this.srv.getAll(body, query, user.refacteurWuser)
     }
 
