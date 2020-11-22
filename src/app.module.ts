@@ -7,6 +7,9 @@ import { HabillementproModule } from './prestations/habillementpro/habillementpr
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './http-exception.filter';
 import { SpaceModule } from './space/space.module';
+import { LivraisonModule } from './livraisons/livraison/livraison.module';
+import { ReceptionModule } from './livraisons/reception/reception.module';
+import { HelpersModule } from './helpers/helpers.module';
 
 @Module({
   imports: [
@@ -15,14 +18,18 @@ import { SpaceModule } from './space/space.module';
     PassageModule,
     FonctionnelleInfosModule,
     HabillementproModule,
-    SpaceModule
+    SpaceModule,
+    LivraisonModule,
+    ReceptionModule,
+    HelpersModule
   ],
   controllers: [],
   providers: [
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
+
     }
-  ],
+  ]
 })
 export class AppModule { }

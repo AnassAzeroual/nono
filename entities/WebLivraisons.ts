@@ -8,14 +8,8 @@ export class WebLivraisons {
   @Column("int", { name: "refbl_wlivraison", nullable: true })
   refblWlivraison: number | null;
 
-  @Column("int", { name: "refclient_wlivraison", nullable: true })
-  refclientWlivraison: number | null;
-
   @Column("varchar", { name: "codebl_wlivraison", nullable: true, length: 20 })
   codeblWlivraison: string | null;
-
-  @Column("varchar", { name: "site_wlivraison", length: 100 })
-  siteWlivraison: string;
 
   @Column("varchar", {
     name: "notesbl_wlivraison",
@@ -38,4 +32,10 @@ export class WebLivraisons {
 
   @Column("varchar", { name: "flag_wlivraison", nullable: true, length: 5 })
   flagWlivraison: string | null;
+
+  @Column("int", { name: "refclient_wlivraison", nullable: true })
+  refclientWlivraison: number | null;
+
+  @Column("varchar", { name: "site_wlivraison", length: 100 })
+  siteWlivraison: string;
 }

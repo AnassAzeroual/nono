@@ -8,14 +8,17 @@ export class WebReceptions {
   @Column("int", { name: "refbrc_wreception", nullable: true })
   refbrcWreception: number | null;
 
-  @Column("int", { name: "refclient_wreception", nullable: true })
-  refclientWreception: number | null;
+  @Column("int", { name: "refacteur_wreception", nullable: true })
+  refacteurWreception: number | null;
 
   @Column("varchar", { name: "codebrc_wreception", nullable: true, length: 50 })
   codebrcWreception: string | null;
 
-  @Column("date", { name: "dreception_wreception", nullable: true })
-  dreceptionWreception: string | null;
+  @Column("date", { name: "dbrc_wreception", nullable: true })
+  dbrcWreception: string | null;
+
+  @Column("int", { name: "refsite_wreception", nullable: true })
+  refsiteWreception: number | null;
 
   @Column("varchar", { name: "site_wreception", nullable: true, length: 100 })
   siteWreception: string | null;

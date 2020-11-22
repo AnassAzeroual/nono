@@ -27,7 +27,7 @@ export class WebUsers {
   })
   loginWuser: string | null;
 
-  @Column("varchar", { name: "password_wuser", nullable: true, length: 20, select: false })
+  @Column("varchar", { name: "password_wuser", nullable: true, length: 20 })
   passwordWuser: string | null;
 
   @Column("varchar", { name: "nom_wuser", nullable: true, length: 100 })

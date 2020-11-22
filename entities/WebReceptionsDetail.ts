@@ -15,8 +15,8 @@ export class WebReceptionsDetail {
   })
   designationarticleWdreception: string | null;
 
-  @Column("varchar", { name: "qte_wdreception", nullable: true, length: 50 })
-  qteWdreception: string | null;
+  @Column("int", { name: "qte_wdreception", nullable: true })
+  qteWdreception: number | null;
 
   @Column("varchar", { name: "flag_wdreception", nullable: true, length: 5 })
   flagWdreception: string | null;
