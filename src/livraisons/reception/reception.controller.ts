@@ -17,8 +17,7 @@ export class ReceptionController {
 
     @Post()
     get(@GetUser() user: WebUsers, @Query() param: InterfaceQuery, @Body() body: getReceptionObject): Promise<unknown> {
-        console.log(param);
-
+        console.log(param, body);
         return this.srv.getALL(user.refacteurWuser, param, body)
     }
 }

@@ -5,6 +5,7 @@ import { WebActeursSites } from './../../entities/WebActeursSites';
 import { getReceptionObject } from './interface.query';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as moment from 'moment';
 
 @Injectable()
 export class HelpersService {
@@ -19,14 +20,16 @@ export class HelpersService {
     public fixDate(body: getReceptionObject): { start, end } {
         let start: any;
         let end: any;
-        if (body.end.length == 0) {
+        if (body.start.length == 0 || body.end.length == 0) {
             const d = new Date();
             d.setDate(d.getDate() - 30);
             start = new Date(d).toLocaleDateString();
             end = new Date().toLocaleDateString();
+            console.log('test moment x: ', start);
+
         } else {
-            start = new Date(body.start).toLocaleDateString();
-            end = new Date(body.end).toLocaleDateString();
+            start = moment(body.start, 'DD/MM/YYYY').format('YYYY-MM-DD');
+            end = moment(body.end, 'DD/MM/YYYY').format('YYYY-MM-DD');
         }
         return { start, end };
     }
