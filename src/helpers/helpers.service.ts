@@ -1,3 +1,5 @@
+import { WebActeursSitesDepartements } from './../../entities/WebActeursSitesDepartements';
+import { WebContrats } from './../../entities/WebContrats';
 import { Repository } from 'typeorm';
 import { WebActeursSites } from './../../entities/WebActeursSites';
 import { getReceptionObject } from './interface.query';
@@ -8,7 +10,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 export class HelpersService {
 
     constructor(
-        @InjectRepository(WebActeursSites) private repoSites: Repository<WebActeursSites>
+        @InjectRepository(WebActeursSites) private repoSites: Repository<WebActeursSites>,
+        @InjectRepository(WebContrats) private repoContrats: Repository<WebContrats>,
+        @InjectRepository(WebActeursSitesDepartements) private repoDepartements: Repository<WebActeursSitesDepartements>,
     ) { }
 
     // Get Date now - 30 days
@@ -31,6 +35,20 @@ export class HelpersService {
         const res = []
         res.push({ refWsiteacteur: 0, intituleWsiteacteur: "TOUTES" })
         res.push(...await this.repoSites.find({ select: ['refWsiteacteur', 'intituleWsiteacteur'], where: { refacteurWsiteacteur } }))
+        return res
+    }
+    // get Contrats by refActeurID
+    public async contrats(refacteurWcontrat: number): Promise<any[]> {
+        const res = []
+        res.push({ refWcontrat: 0, codeWcontrat: "TOUTES" })
+        res.push(...await this.repoContrats.find({ select: ['refWcontrat', 'codeWcontrat'], where: { refacteurWcontrat } }))
+        return res
+    }
+    // get Departements by refActeurID
+    public async departements(refacteurWdepsite: number): Promise<any[]> {
+        const res = []
+        res.push({ refWdepsite: 0, intituleWdepsite: "TOUTES" })
+        res.push(...await this.repoDepartements.find({ select: ['refWdepsite', 'intituleWdepsite'], where: { refacteurWdepsite } }))
         return res
     }
 }

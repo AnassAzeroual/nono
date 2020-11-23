@@ -1,3 +1,4 @@
+import { HelpersService } from './../helpers/helpers.service';
 import { WebActeursSitesDepartements } from './../../entities/WebActeursSitesDepartements';
 import { WebActeursSites } from './../../entities/WebActeursSites';
 import { WebContrats } from './../../entities/WebContrats';
@@ -15,6 +16,7 @@ export class SpaceService {
         @InjectRepository(WebContrats) private repoWebContrats: Repository<WebContrats>,
         @InjectRepository(WebActeursSites) private repoWebActeursSites: Repository<WebActeursSites>,
         @InjectRepository(WebActeursSitesDepartements) private repoWebActeursSitesDepartements: Repository<WebActeursSitesDepartements>,
+        private srvHelpers: HelpersService
     ) { }
 
 
@@ -42,7 +44,7 @@ export class SpaceService {
             WHERE u.refacteur_wuser = ${refacteurWuser} 
             AND s.ref_wsiteacteur LIKE '${search.site}' 
             AND c.refcontrat_wcontrat LIKE '${search.contrat}' 
-            AND d.refsite_wdepsite LIKE '${search.dept}'
+            AND d.ref_wdepsite LIKE '${search.dept}'
         
         GROUP BY u.login_wuser,u.password_wuser
         ORDER BY s.intitule_wsiteacteur ,d.ordre_wdepsite,u.nom_wuser ,u.prenom_wuser
@@ -58,9 +60,11 @@ export class SpaceService {
             WHERE u.refacteur_wuser = ${refacteurWuser} 
             AND s.ref_wsiteacteur LIKE '${search.site}' 
             AND c.refcontrat_wcontrat LIKE '${search.contrat}' 
-            AND d.refsite_wdepsite LIKE '${search.dept}'
+            AND d.ref_wdepsite LIKE '${search.dept}'
             GROUP BY u.login_wuser,u.password_wuser
         `
+        console.log(dataSearch);
+
         // Get data search with search and paginated
         const res = await this.repoWebUsers.query(dataSearch)
         // Add Sites for options update
@@ -109,25 +113,11 @@ export class SpaceService {
         return { res }
     }
 
-
-    //--------- filters
-    async getContartsByIdActeur(refacteurWcontrat: number): Promise<unknown> {
-        return await this.repoWebContrats.find({ select: ['refcontratWcontrat', 'codeWcontrat'], where: { refacteurWcontrat } }) || []
-    }
-
-    async getSitesByIdActeur(refacteurWsiteacteur: number): Promise<unknown> {
-        return await this.repoWebActeursSites.find({ select: ['refWsiteacteur', 'intituleWsiteacteur'], where: { refacteurWsiteacteur } }) || []
-    }
-
-    async getSitesDepartementsByIdActeur(refacteurWdepsite: number): Promise<unknown> {
-        return await this.repoWebActeursSitesDepartements.find({ select: ['refWdepsite', 'intituleWdepsite'], where: { refacteurWdepsite } }) || []
-    }
-
     async buildFilter(refActeur: number): Promise<unknown> {
         const res = {
-            contrat: await this.getContartsByIdActeur(refActeur),
-            site: await this.getSitesByIdActeur(refActeur),
-            departement: await this.getSitesDepartementsByIdActeur(refActeur),
+            contrat: await this.srvHelpers.contrats(refActeur),
+            site: await this.srvHelpers.sites(refActeur),
+            departement: await this.srvHelpers.departements(refActeur)
         }
         return { res }
     }

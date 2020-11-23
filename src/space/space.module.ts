@@ -1,3 +1,4 @@
+import { HelpersModule } from './../helpers/helpers.module';
 import { WebActeursSitesDepartements } from './../../entities/WebActeursSitesDepartements';
 import { WebContrats } from './../../entities/WebContrats';
 import { WebUsers } from './../../entities/WebUsers';
@@ -12,6 +13,7 @@ import { WebActeursSites } from './../../entities/WebActeursSites';
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     TypeOrmModule.forFeature([WebUsers, WebContrats, WebActeursSites, WebActeursSitesDepartements]),
+    HelpersModule
   ],
   controllers: [SpaceController],
   providers: [SpaceService]
