@@ -1,4 +1,36 @@
+import { HelpersService } from './../../helpers/helpers.service';
+import { getReceptionObject, InterfaceQuery } from './../../helpers/interface.query';
+import { WebLivraisonsDetail } from './../../../entities/WebLivraisonsDetail';
+import { WebLivraisons } from './../../../entities/WebLivraisons';
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
-export class LivraisonService {}
+export class LivraisonService {
+    constructor(
+        @InjectRepository(WebLivraisons) private repoLivraison: Repository<WebLivraisons>,
+        @InjectRepository(WebLivraisonsDetail) private repoDetails: Repository<WebLivraisonsDetail>,
+        private srvHelpers: HelpersService
+    ) { }
+
+    async getALL(clientID: number, param: InterfaceQuery, body: getReceptionObject): Promise<unknown> {
+        const { start, end } = this.srvHelpers.fixDate(body)
+        const { take, skip } = param;
+
+        const query = `SELECT * FROM web_livraisons AS r
+        WHERE r.refclient_wlivraison = ${clientID}
+        AND (r.datebl_wlivraison BETWEEN '${start}' AND '${end}')
+        AND r.site_wlivraison LIKE '${(body.site) ? body.site : '%'}'
+        LIMIT ${skip}, ${take}
+        `
+        const queryCount = `SELECT COUNT(*) as count FROM web_livraisons AS r
+        WHERE r.refclient_wlivraison = ${clientID}
+        AND (r.datebl_wlivraison BETWEEN '${start}' AND '${end}')
+        AND r.site_wlivraison LIKE '${(body.site) ? body.site : '%'}'`
+
+        const data = await this.repoLivraison.query(query)
+        const count = await this.repoLivraison.query(queryCount)
+        return { data, count: Number(count[0]['count']) }
+    }
+}

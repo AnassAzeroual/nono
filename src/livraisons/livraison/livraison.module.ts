@@ -1,3 +1,4 @@
+import { HelpersModule } from './../../helpers/helpers.module';
 import { WebLivraisonsDetail } from './../../../entities/WebLivraisonsDetail';
 import { WebLivraisons } from './../../../entities/WebLivraisons';
 import { Module } from '@nestjs/common';
@@ -10,6 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     TypeOrmModule.forFeature([WebLivraisons, WebLivraisonsDetail]),
+    HelpersModule
   ],
   controllers: [LivraisonController],
   providers: [LivraisonService]
