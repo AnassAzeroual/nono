@@ -10,6 +10,7 @@ import { SpaceModule } from './space/space.module';
 import { LivraisonModule } from './livraisons/livraison/livraison.module';
 import { ReceptionModule } from './livraisons/reception/reception.module';
 import { HelpersModule } from './helpers/helpers.module';
+import { MoncompteModule } from './moncompte/moncompte.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { HelpersModule } from './helpers/helpers.module';
     SpaceModule,
     LivraisonModule,
     ReceptionModule,
-    HelpersModule
+    HelpersModule,
+    MoncompteModule
   ],
   controllers: [],
   providers: [

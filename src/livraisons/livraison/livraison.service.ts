@@ -2,7 +2,7 @@ import { HelpersService } from './../../helpers/helpers.service';
 import { getReceptionObject, InterfaceQuery } from './../../helpers/interface.query';
 import { WebLivraisonsDetail } from './../../../entities/WebLivraisonsDetail';
 import { WebLivraisons } from './../../../entities/WebLivraisons';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -32,5 +32,11 @@ export class LivraisonService {
         const data = await this.repoLivraison.query(query)
         const count = await this.repoLivraison.query(queryCount)
         return { data, count: Number(count[0]['count']) }
+    }
+
+    async getArticleByID(id: number, { skip, take }): Promise<unknown> {
+        const data = await this.repoDetails.findAndCount({ where: { refblWdlivraison: id }, skip, take })
+
+        return { data: data[0], count: data[1] }
     }
 }

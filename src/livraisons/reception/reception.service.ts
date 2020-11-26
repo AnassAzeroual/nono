@@ -39,4 +39,10 @@ export class ReceptionService {
         const res = await this.srvHelpers.sites(id)
         return { res }
     }
+
+    async getArticleByID(id: number, { skip, take }): Promise<unknown> {
+        const data = await this.repoWebRDetails.findAndCount({ where: { refbrcWdreception: id }, skip, take })
+
+        return { data: data[0], count: data[1] }
+    }
 }
