@@ -24,8 +24,6 @@ export class HabillementproController {
 
     @Post('/search')
     getdata(@Query() query: InterfaceQuery, @GetUser() user: WebUsers, @Body() search: search): Promise<unknown> {
-        console.log(query);
-
         return this.srv.search(query, user.refacteurWuser, search)
     }
 

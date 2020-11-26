@@ -59,10 +59,8 @@ export class HabillementproService {
         }
         A_AV_check = await this.repoWebPorteurs.query(`
         SELECT COUNT(*) as a FROM  web_porteurs
-        WHERE refacteur_wdotporteur = ${refacteur_wdotporteur}
-        AND  flag_wdotporteur = 'A'
-        AND etat_wdotporteur != 'AV'
-        OR taille_wdotporteur = ''
+        WHERE refacteur_wdotporteur = ${refacteur_wdotporteur} AND  flag_wdotporteur = 'A'
+        AND (etat_wdotporteur != 'AV' OR taille_wdotporteur = '')
         `)
 
         // if detail true ADD taille options (xs m l s ...)

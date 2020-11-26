@@ -25,8 +25,6 @@ export class HelpersService {
             d.setDate(d.getDate() - 30);
             start = new Date(d).toLocaleDateString();
             end = new Date().toLocaleDateString();
-            console.log('test moment x: ', start);
-
         } else {
             start = moment(body.start, 'DD/MM/YYYY').format('YYYY-MM-DD');
             end = moment(body.end, 'DD/MM/YYYY').format('YYYY-MM-DD');

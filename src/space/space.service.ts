@@ -63,8 +63,6 @@ export class SpaceService {
             AND d.ref_wdepsite LIKE '${search.dept}'
             GROUP BY u.login_wuser,u.password_wuser
         `
-        console.log(dataSearch);
-
         // Get data search with search and paginated
         const res = await this.repoWebUsers.query(dataSearch)
         // Add Sites for options update
@@ -76,7 +74,6 @@ export class SpaceService {
     }
 
     private async buildSpace(res) {
-        console.log(res);
 
         const data = res;
         if (res) {
