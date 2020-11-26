@@ -1,5 +1,5 @@
 import { MoncompteService } from './moncompte.service';
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { WebUsers } from 'entities/WebUsers';
 import { GetUser } from 'src/get-user.decorator';
@@ -13,5 +13,10 @@ export class MoncompteController {
     async getActeur(@GetUser() user: WebUsers): Promise<unknown> {
         const res = await this.srv.getActeurInfos(user.refacteurWuser)
         return { res }
+    }
+
+    @Post()
+    updateRefacteur(@GetUser() user: WebUsers, @Body() body: unknown): Promise<unknown> {
+        return this.srv.update(user.refacteurWuser, body)
     }
 }
