@@ -1,0 +1,18 @@
+{
+    "type": "mysql",
+    "host": "b2owittsnbtw9pnscdzm-mysql.services.clever-cloud.com",
+    "port": 3306,
+    "username": "ult38p6xawqydnsi",
+    "password": "YGvU3gEG8NXAvpaZffX4",
+    "database": "b2owittsnbtw9pnscdzm",
+    "synchronize": true,
+    "entities": [
+        "dist/entities/*{.ts,.js}"
+    ],
+    "migrations": [
+        "migration/**/*.ts"
+    ],
+    "subscribers": [
+        "subscriber/**/*.ts"
+    ]
+}
