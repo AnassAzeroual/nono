@@ -10,6 +10,7 @@ async function bootstrap() {
     'https://auclair.000webhostapp.com',
     'http://localhost:3333',
     'http://localhost:80',
+    'http://localhost'
   ];
 
   const corsOptions = {
