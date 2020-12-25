@@ -26,6 +26,9 @@ export class WebContrats {
   @Column("date", { name: "datemiseenplace_wcontrat", nullable: true })
   datemiseenplaceWcontrat: string | null;
 
+  @Column("int", { name: "dureecontratmois_wcontrat" })
+  dureecontratmoisWcontrat: number;
+
   @Column("date", { name: "du_wcontrat", nullable: true })
   duWcontrat: string | null;
 

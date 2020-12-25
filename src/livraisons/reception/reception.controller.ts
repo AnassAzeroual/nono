@@ -1,9 +1,9 @@
+import { GetUser } from './../../get-user.decorator';
 import { getReceptionObject, InterfaceQuery } from './../../helpers/interface.query';
 import { WebUsers } from './../../../entities/WebUsers';
 import { ReceptionService } from './reception.service';
 import { Body, Controller, Post, UseGuards, Query, Get, Param } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/get-user.decorator';
 
 @Controller('reception')
 @UseGuards(AuthGuard())

@@ -6,6 +6,9 @@ import { getReceptionObject } from './interface.query';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as moment from 'moment';
+import { extname } from 'path'
+import { v4 as uuidv4 } from 'uuid';
+import fs = require('fs');
 
 @Injectable()
 export class HelpersService {
@@ -32,24 +35,53 @@ export class HelpersService {
         return { start, end };
     }
     // get Site by refActeurID
-    public async sites(refacteurWsiteacteur: number): Promise<any[]> {
+    public async sites(refacteurWsiteacteur: number): Promise<unknown> {
         const res = []
         res.push({ refWsiteacteur: 0, intituleWsiteacteur: "TOUTES" })
         res.push(...await this.repoSites.find({ select: ['refWsiteacteur', 'intituleWsiteacteur'], where: { refacteurWsiteacteur } }))
-        return res
+        return { res }
     }
     // get Contrats by refActeurID
-    public async contrats(refacteurWcontrat: number): Promise<any[]> {
+    public async contrats(refacteurWcontrat: number): Promise<unknown> {
         const res = []
         res.push({ refWcontrat: 0, codeWcontrat: "TOUTES" })
         res.push(...await this.repoContrats.find({ select: ['refWcontrat', 'codeWcontrat'], where: { refacteurWcontrat } }))
-        return res
+        return { res }
     }
     // get Departements by refActeurID
-    public async departements(refacteurWdepsite: number): Promise<any[]> {
+    public async departements(refacteurWdepsite: number): Promise<unknown> {
         const res = []
         res.push({ refWdepsite: 0, intituleWdepsite: "TOUTES" })
         res.push(...await this.repoDepartements.find({ select: ['refWdepsite', 'intituleWdepsite'], where: { refacteurWdepsite } }))
-        return res
+        return { res }
     }
+    // get Departements by Site ID
+    public async departementsBySiteID(refsiteWdepsite: number): Promise<unknown> {
+        const res = []
+        res.push({ refWdepsite: 0, intituleWdepsite: "TOUTES" })
+        res.push(...await this.repoDepartements.find({ select: ['refWdepsite', 'intituleWdepsite'], where: { refsiteWdepsite }, order: { ordreWdepsite: 'ASC' } }))
+        return { res }
+    }
+
 }
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const imageFileFilter = (req, file, callback) => {
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+        return callback(new Error('Only image files are allowed!'), false);
+    }
+    callback(null, true);
+};
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const editFileName = (req, file, callback) => {
+    // console.log(req.headers.host);
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+    }
+    const name = uuidv4();
+    const fileExtName = extname(file.originalname);
+    callback(null, `${name}${fileExtName}`);
+};
+
+export const dir = './sources';

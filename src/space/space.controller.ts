@@ -15,11 +15,6 @@ export class SpaceController {
         return this.srv.getAll(body, query, user.refacteurWuser)
     }
 
-    @Get('/filter')
-    getdataFilter(@GetUser() user: WebUsers): Promise<unknown> {
-        return this.srv.buildFilter(user.refacteurWuser)
-    }
-
     @Get('/sites')
     getdataSites(@GetUser() user: WebUsers): Promise<unknown> {
         return this.srv.getSitesByRefActeur(user.refacteurWuser)

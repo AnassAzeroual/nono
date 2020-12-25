@@ -1,8 +1,8 @@
+import { WebUsers } from './../../entities/WebUsers';
+import { GetUser } from './../get-user.decorator';
 import { MoncompteService } from './moncompte.service';
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { WebUsers } from 'entities/WebUsers';
-import { GetUser } from 'src/get-user.decorator';
 
 @Controller('moncompte')
 @UseGuards(AuthGuard())

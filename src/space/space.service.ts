@@ -1,7 +1,3 @@
-import { HelpersService } from './../helpers/helpers.service';
-import { WebActeursSitesDepartements } from './../../entities/WebActeursSitesDepartements';
-import { WebActeursSites } from './../../entities/WebActeursSites';
-import { WebContrats } from './../../entities/WebContrats';
 import { WebUsers } from './../../entities/WebUsers';
 import { InterfaceQuery } from './../helpers/interface.query';
 import { Injectable } from '@nestjs/common';
@@ -13,10 +9,6 @@ export class SpaceService {
 
     constructor(
         @InjectRepository(WebUsers) private repoWebUsers: Repository<WebUsers>,
-        @InjectRepository(WebContrats) private repoWebContrats: Repository<WebContrats>,
-        @InjectRepository(WebActeursSites) private repoWebActeursSites: Repository<WebActeursSites>,
-        @InjectRepository(WebActeursSitesDepartements) private repoWebActeursSitesDepartements: Repository<WebActeursSitesDepartements>,
-        private srvHelpers: HelpersService
     ) { }
 
 
@@ -107,15 +99,6 @@ export class SpaceService {
         });
 
         const res = this.repoWebUsers.save(user)
-        return { res }
-    }
-
-    async buildFilter(refActeur: number): Promise<unknown> {
-        const res = {
-            contrat: await this.srvHelpers.contrats(refActeur),
-            site: await this.srvHelpers.sites(refActeur),
-            departement: await this.srvHelpers.departements(refActeur)
-        }
         return { res }
     }
 

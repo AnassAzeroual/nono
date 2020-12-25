@@ -1,15 +1,11 @@
 {
   "name": "myauclair-api",
   "version": "0.0.1",
-  "engines": {
-    "node": "12.18.3",
-    "npm": "6.14.6"
-  },
   "description": "",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
-    "scripts": {
+  "scripts": {
     "db": "rm -rf entities & npx typeorm-model-generator -h localhost -d auclairm_espaceclient -p 3306 -u root -x  -e mysql -o entities --noConfig true --ce pascal --cp camel",
     "prebuild": "rimraf dist",
     "build": "nest build",
@@ -18,7 +14,7 @@
     "start:dev": "nest start --watch",
     "dev": "nodemon",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/src/main",
+    "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -27,8 +23,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "migration:generate": "npx ts-node node_modules/.bin/typeorm migration:generate --config ./ormconfig.json --name",
     "migration:run": "ts-node node_modules/.bin/typeorm migration:run --config ./ormconfig.json",
-    "migration:revert": "ts-node node_modules/.bin/typeorm migration:revert --config ./ormconfig.json",
-    "heroku-postbuild": "npm install --only=dev --no-shrinkwrap && npm run build"
+    "migration:revert": "ts-node node_modules/.bin/typeorm migration:revert --config ./ormconfig.json"
   },
   "dependencies": {
     "@nestjs/common": "^7.0.0",
@@ -36,6 +31,7 @@
     "@nestjs/jwt": "^7.1.0",
     "@nestjs/passport": "^7.1.0",
     "@nestjs/platform-express": "^7.0.0",
+    "@nestjs/serve-static": "^2.1.4",
     "@nestjs/typeorm": "^7.1.4",
     "bcrypt": "^5.0.0",
     "moment": "^2.29.1",
@@ -45,7 +41,8 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
-    "typeorm": "^0.2.26"
+    "typeorm": "^0.2.26",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.0.0",
