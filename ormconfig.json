@@ -1,13 +1,13 @@
 {
     "type": "mysql",
-    "host": "bwuqxsov1rhgswjlxgh6-mysql.services.clever-cloud.com",
+    "host": "bkizvgmfpoorqxqhphjx-mysql.services.clever-cloud.com",
     "port": 3306,
-    "username": "usvxd5gjjpldowxs",
-    "password": "cJhz3hguqx3CNzzg0aiD",
-    "database": "bwuqxsov1rhgswjlxgh6",
-    "synchronize": true,
+    "username": "uguf6cwrgxtpnsdn",
+    "password": "h3JUt8mLeaGLHSKVR0PY",
+    "database": "bkizvgmfpoorqxqhphjx",
+    "synchronize": false,
     "entities": [
-        "entities/*{.ts,.js}"
+        "dist/entities/*{.ts,.js}"
     ],
     "migrations": [
         "migration/**/*.ts"
