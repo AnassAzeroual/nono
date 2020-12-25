@@ -5,7 +5,7 @@
     "username": "uguf6cwrgxtpnsdn",
     "password": "h3JUt8mLeaGLHSKVR0PY",
     "database": "bkizvgmfpoorqxqhphjx",
-    "synchronize": false,
+    "synchronize": true,
     "entities": [
         "dist/entities/*{.ts,.js}"
     ],
