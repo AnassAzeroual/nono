@@ -6,6 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new HttpExceptionFilter());
   const allowedOrigins = [
+    'http://app-ab3a11f1-f2d5-4f9a-ba80-e546892b8341.cleverapps.io',
     'http://app-29530830-8c51-4224-892e-66faca2b014a.cleverapps.io',
     'http://app-29530830-8c51-4224-892e-66faca2b014a.cleverapps.io/',
     'http://app-a4c83ddb-89c0-4b9e-b544-048e0a6386fc.cleverapps.io',
