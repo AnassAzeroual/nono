@@ -6,12 +6,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new HttpExceptionFilter());
   const allowedOrigins = [
+    'http://app-29530830-8c51-4224-892e-66faca2b014a.cleverapps.io',
+    'http://app-29530830-8c51-4224-892e-66faca2b014a.cleverapps.io/',
     'http://localhost:4200',
     'https://auclair.000webhostapp.com',
     'http://localhost:3333',
     'http://localhost:80',
-    'http://localhost',
-    'http://app-29530830-8c51-4224-892e-66faca2b014a.cleverapps.io',
+    'http://localhost'
   ];
 
   const corsOptions = {
