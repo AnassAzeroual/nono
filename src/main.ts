@@ -11,7 +11,7 @@ async function bootstrap() {
     'http://localhost:3333',
     'http://localhost:80',
     'http://localhost',
-    'http://app-c396e8fd-b0eb-483d-9622-67cfdfd58b17.cleverapps.io'
+    'http://app-a4c83ddb-89c0-4b9e-b544-048e0a6386fc.cleverapps.io'
   ];
 
   const corsOptions = {
