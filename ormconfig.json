@@ -1,18 +1,12 @@
 {
     "type": "mysql",
-    "host": "localhost",
+    "host": "bues60pg3hwsm07ocxu2-mysql.services.clever-cloud.com",
     "port": 3306,
-    "username": "root",
-    "password": "",
-    "database": "auclairm_espaceclient",
+    "username": "ufrdbjkzixeppnmi",
+    "password": "ZZBQz0eOHo7kH3XLzl0s",
+    "database": "bues60pg3hwsm07ocxu2",
     "synchronize": true,
     "entities": [
         "dist/entities/*{.ts,.js}"
-    ],
-    "migrations": [
-        "migration/**/*.ts"
-    ],
-    "subscribers": [
-        "subscriber/**/*.ts"
     ]
 }
