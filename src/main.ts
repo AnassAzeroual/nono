@@ -8,7 +8,8 @@ async function bootstrap() {
   const allowedOrigins = [
     'http://localhost:4200',
     'https://auclair.000webhostapp.com',
-    'http://app-e7143e66-c3d8-4044-9682-3b4b7a337d91.cleverapps.io/'
+    'http://app-e7143e66-c3d8-4044-9682-3b4b7a337d91.cleverapps.io/',
+    'http://app-f8b830eb-c75c-40f2-9eeb-4ff927bd5d95.cleverapps.io/'
   ];
 
   const corsOptions = {
