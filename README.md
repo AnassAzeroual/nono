@@ -8,7 +8,7 @@ to store data (string,object or array of abjects) in localstore or sessionstore 
 import { LocalstorageService,SessionstorageService } from 'ng-crypto-store';
 
 > add to constructor LocalstorageService or SessionstorageService
-> constructor(private srv: LocalstorageService) { }
+constructor(private srv: LocalstorageService) { }
 
 ## usage
 
