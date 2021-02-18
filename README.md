@@ -11,7 +11,7 @@ import { LocalstorageService,SessionstorageService } from 'ng-crypto-store';
 
 constructor(private srv: LocalstorageService) { }
 
-## usage
+## Usage
 
 > setItem(name: string, data: any, secret?: any): Promise<void>
 
