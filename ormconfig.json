@@ -5,14 +5,8 @@
     "username": "root",
     "password": "",
     "database": "auclairm_espaceclient",
-    "synchronize": true,
+    "synchronize": false,
     "entities": [
-        "dist/entities/*{.ts,.js}"
-    ],
-    "migrations": [
-        "migration/**/*.ts"
-    ],
-    "subscribers": [
-        "subscriber/**/*.ts"
+        "entities/*{.ts,.js}"
     ]
 }

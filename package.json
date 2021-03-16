@@ -34,6 +34,7 @@
     "@nestjs/serve-static": "^2.1.4",
     "@nestjs/typeorm": "^7.1.5",
     "bcrypt": "^5.0.0",
+    "compression": "^1.7.4",
     "mariadb": "^2.5.2",
     "moment": "^2.29.1",
     "mysql": "^2.18.1",

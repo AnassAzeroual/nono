@@ -9,7 +9,8 @@ async function bootstrap() {
     app.useGlobalFilters(new http_exception_filter_1.HttpExceptionFilter());
     const allowedOrigins = [
         'http://localhost:4200',
-        'https://auclair.000webhostapp.com'
+        'https://auclair.000webhostapp.com',
+        'http://app-c8439bf1-32fb-4dda-a15c-f574fb023d50.cleverapps.io'
     ];
     const corsOptions = {
         origin: (origin, callback) => {

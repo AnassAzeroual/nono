@@ -48,7 +48,7 @@ AppModule = __decorate([
                 "database": "b9omf6ziddw3fdjfsbrr",
                 "synchronize": false,
                 "entities": [
-                    "./dist/entities/*{.ts,.js}"
+                    "./entities/*{.ts,.js}"
                 ]
             }),
             auth_module_1.AuthModule,
