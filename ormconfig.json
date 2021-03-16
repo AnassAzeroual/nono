@@ -1,12 +1,18 @@
 {
-    "type": "mysql",
-    "host": "bues60pg3hwsm07ocxu2-mysql.services.clever-cloud.com",
+    "type": "mariadb",
+    "host": "localhost",
     "port": 3306,
-    "username": "ufrdbjkzixeppnmi",
-    "password": "ZZBQz0eOHo7kH3XLzl0s",
-    "database": "bues60pg3hwsm07ocxu2",
+    "username": "root",
+    "password": "",
+    "database": "auclairm_espaceclient",
     "synchronize": true,
     "entities": [
         "dist/entities/*{.ts,.js}"
+    ],
+    "migrations": [
+        "migration/**/*.ts"
+    ],
+    "subscribers": [
+        "subscriber/**/*.ts"
     ]
 }
